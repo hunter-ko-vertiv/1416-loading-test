@@ -1,40 +1,184 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<head>
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
 
-		<title>reveal.js</title>
+	<title>reveal.js</title>
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+	<link href="dist/reset.css" rel="stylesheet">
+	<link href="dist/reveal.css" rel="stylesheet">
+	<link href="dist/theme/black.css" rel="stylesheet">
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
+	<!-- Theme used for syntax highlighted code -->
+	<link href="plugin/highlight/monokai.css" rel="stylesheet">
+</head>
+<body>
+<div class="reveal">
+	<div class="slides">
+		<section>
+			<section>
+				<h2>Issue-1416</h2>
+				<div>SP Scalability Phase 2 - collecting ideas and researching tools</div>
+			</section>
+			<section>
+				<h2>Goal</h2>
+				<div>Collect more precise CPU usage for explaining the relationship between users behavior and the status of Firefly</div>
+			</section>
+			<section>
+				<h2>Precondition</h2>
+				<div>At least 25 users where the page is being updated every 15 seconds</div>
+				<div>Let users randomly fetch different SP data</div>
+			</section>
+			<section>
+				<h2>Experimental method</h2>
+			</section>
+			<section>
+				<h2>Feedback require</h2>
+				<ul>
+					<li>More reliable data collection(grafana + prometheus + node_exporter)</li>
+					<li>Reduce the time to transfer SP to be managed(Spider v.1.2.1 provides speed up)</li>
+					<li>Use K6 replace Robert framework to test</li>
+				</ul>
+			</section>
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
+		</section>
+		<section>
+			<section style="text-align: left;">
+				<div>
+					<div>What tools are used for the testing:</div>
+					<br>
+					<ul style="list-style: none; text-align: left">
+						<li><a href="https://grafana.com/">Grafana</a> - Graphic Integration</li>
+						<li><a href="https://prometheus.io/">Prometheus</a> - Monitoring system and time series
+							database
+						</li>
+						<li><a href="https://github.com/prometheus/node_exporter">Node Exporter</a> - Prometheus
+							plugin
+						</li>
+						<li><a href="https://k6.io/">K6</a> - Loading test tool</li>
+					</ul>
+				</div>
+			</section>
+			<section>
+				Architecture Chart
+				<img alt="" src="./assets/all_view.png">
+			</section>
+		</section>
+		<section>
+			<section>
+				<h2>Grafana</h2>
+				<div>Grafana is the open source analytics & monitoring solution for every database.</div>
+			</section>
+			<section>
+				<a href="https://play.grafana.org/" style="cursor: pointer">Grafana Demo site</a>
+			</section>
+			<section>
+				<div>How to start</div>
+				<pre>
+					<code data-noescape data-trim>
+						docker run -d --name=grafana -p 3000:3000 grafana/grafana
+					</code>
+				</pre>
+			</section>
+			<section>
+				<div>Account: admin/admin</div>
+				<a href="http://localhost:3000" style="cursor: pointer">http://{{host_ip}}:3000</a>
+				<img alt="" src="./assets/login.png">
+			</section>
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+		</section>
+		<section>
+			<section>
+				<h2>Prometheus</h2>
+				<div>The Prometheus monitoring system and time series database.</div>
+			</section>
+			<section>
+				<div>How to install prometheus</div>
+				<pre>
+					<code data-noescape data-trim>
+						wget https://github.com/prometheus/prometheus/releases/download/v2.30.0/prometheus-2.30.0.darwin-amd64.tar.gz
+						tar -xvf ./prometheus-2.30.0.darwin-amd64.tar.gz
+						cd ./prometheus-2.30.0.darwin-amd64
+					</code>
+				</pre>
+			</section>
+			<section>
+				<div>Update prometheus config the launch it</div>
+				<pre>
+					<code data-noescape data-trim>
+						vi prometheus.yml
+					</code>
+				</pre>
+				<pre>
+					<code data-trim data-noescape >
+						scrape_configs:
+						- job_name: "node_expoter"
+						static_configs:
+						- targets: ["localhost:9100"]
+					</code>
+				</pre>
+				<pre>
+					<code data-trim data-noescape >
+						sudo ./prometheus
+					</code>
+				</pre>
+			</section>
+			<section>
+				<div>Check service is working</div>
+				<a href="http://localhost:9090">http://{{host_ip}}:9090</a>
+				<img src="./assets/prometheus.png" alt="">
+			</section>
+		</section>
+		<section>
+			<section>
+				<h2>Node Exporter</h2>
+				<div>Exporter for machine metrics.</div>
+			</section>
+			<section>
+				<div>How to start Node Exporter</div>
+				<pre>
+					<code data-noescape data-trim>
+						wget https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.darwin-amd64.tar.gz
+						tar -xvf ./node_exporter-1.2.2.darwin-amd64.tar.gz
+						cd ./node_exporter-1.2.2.darwin-amd64
+					</code>
+				</pre>
+				<pre>
+					<code data-trim data-noescape >
+						sudo ./node_exporter
+					</code>
+				</pre>
+			</section>
+			<section>
+				<div>Check service is working</div>
+				<a href="http://localhost:9100/metrics">http://{{host_ip}}:91000/metrics</a>
+				<img style="width: 60%" src="./assets/node_exporter.png" alt="">
+			</section>
+		</section>
+		<section>
+			<section>
+				<h2>K6</h2>
+				<div>k6 is the open-source load testing tool built for making performance testing a productive.</div>
+			</section>
+		</section>
+	</div>
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script>
+	// More info about initialization & config:
+	// - https://revealjs.com/initialization/
+	// - https://revealjs.com/config/
+	Reveal.initialize({
+		hash: true,
+
+// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+	});
+</script>
+</body>
 </html>
