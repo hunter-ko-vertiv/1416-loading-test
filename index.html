@@ -71,87 +71,26 @@
 				<div>Grafana is the open source analytics & monitoring solution for every database.</div>
 			</section>
 			<section>
+				<div>Sample graph</div>
+				<img alt="" src="./assets/grafana.png">
+			</section>
+			<section>
 				<a href="https://play.grafana.org/" style="cursor: pointer">Grafana Demo site</a>
 			</section>
-			<section>
-				<div>How to start</div>
-				<pre>
-					<code data-noescape data-trim>
-						docker run -d --name=grafana -p 3000:3000 grafana/grafana
-					</code>
-				</pre>
-			</section>
-			<section>
-				<div>Account: admin/admin</div>
-				<a href="http://localhost:3000" style="cursor: pointer">http://{{host_ip}}:3000</a>
-				<img alt="" src="./assets/login.png">
-			</section>
-
-		</section>
-		<section>
 			<section>
 				<h2>Prometheus</h2>
 				<div>The Prometheus monitoring system and time series database.</div>
 			</section>
 			<section>
-				<div>How to install prometheus</div>
-				<pre>
-					<code data-noescape data-trim>
-						wget https://github.com/prometheus/prometheus/releases/download/v2.30.0/prometheus-2.30.0.darwin-amd64.tar.gz
-						tar -xvf ./prometheus-2.30.0.darwin-amd64.tar.gz
-						cd ./prometheus-2.30.0.darwin-amd64
-					</code>
-				</pre>
-			</section>
-			<section>
-				<div>Update prometheus config the launch it</div>
-				<pre>
-					<code data-noescape data-trim>
-						vi prometheus.yml
-					</code>
-				</pre>
-				<pre>
-					<code data-trim data-noescape >
-						scrape_configs:
-						- job_name: "node_expoter"
-						static_configs:
-						- targets: ["localhost:9100"]
-					</code>
-				</pre>
-				<pre>
-					<code data-trim data-noescape >
-						sudo ./prometheus
-					</code>
-				</pre>
-			</section>
-			<section>
-				<div>Check service is working</div>
-				<a href="http://localhost:9090">http://{{host_ip}}:9090</a>
+				<div>Sample page</div>
 				<img src="./assets/prometheus.png" alt="">
 			</section>
-		</section>
-		<section>
 			<section>
 				<h2>Node Exporter</h2>
 				<div>Exporter for machine metrics.</div>
 			</section>
 			<section>
-				<div>How to start Node Exporter</div>
-				<pre>
-					<code data-noescape data-trim>
-						wget https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.darwin-amd64.tar.gz
-						tar -xvf ./node_exporter-1.2.2.darwin-amd64.tar.gz
-						cd ./node_exporter-1.2.2.darwin-amd64
-					</code>
-				</pre>
-				<pre>
-					<code data-trim data-noescape >
-						sudo ./node_exporter
-					</code>
-				</pre>
-			</section>
-			<section>
-				<div>Check service is working</div>
+				<div>Get Metrics result</div>
 				<a href="http://localhost:9100/metrics">http://{{host_ip}}:91000/metrics</a>
 				<img style="width: 60%" src="./assets/node_exporter.png" alt="">
 			</section>
@@ -160,6 +99,16 @@
 			<section>
 				<h2>K6</h2>
 				<div>k6 is the open-source load testing tool built for making performance testing a productive.</div>
+			</section>
+			<section>
+				<h2>Benefit</h2>
+				<ul>
+					<li>Automated testing</li>
+					<li>Javascript write tests</li>
+					<li>Multiple storage possibilities</li>
+					<li>High-performance tool</li>
+					<li>Effortless cloud scaling</li>
+				</ul>
 			</section>
 		</section>
 	</div>
